@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cabin / Will my bag fit?</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header><a href="./" class="logo"><span>↗</span> cabin<span class="logo-dot">.</span></a><span class="header-note">A SMALL EXPERIMENT IN SHARED SPACE</span><span class="lab">BOARDING LAB / 01</span></header>
+<main>
+<section class="intro"><div><p class="eyebrow">EVERYDAY SYSTEMS, MADE VISIBLE</p><h1>Will my bag <em>fit?</em></h1><p class="lede">Same passengers. Same capacity. Two ways to model it.<br>Explore why empty space isn’t always usable space.</p></div><div class="ticket"><span>STORAGE EXPERIMENT</span><strong>12 <small>units</small></strong><div>ONE CABIN <span>↗</span> TWO MODELS</div></div></section>
+<section class="experiment" aria-label="Boarding simulation">
+<div class="toolbar"><label for="scenario">CHOOSE AN EXPERIMENT<select id="scenario"><option value="gaps">The leftover-space puzzle</option><option value="fits">A flight where everyone fits</option><option value="full">More bags than space</option><option value="custom">Your own bag sequence</option></select></label><div class="actions"><button id="reset" class="secondary">↺ Reset</button><button id="next" class="primary">Board next passenger <span>→</span></button></div></div>
+<div id="custom-panel" hidden><label for="custom">Bag sizes in boarding order (1, 2, or 3 units; up to 16 bags)</label><div><input id="custom" value="3, 3, 3, 2"><button id="apply" class="secondary">Apply sequence</button></div><p id="error" role="alert"></p></div>
+<div class="queue-header"><h2>The boarding queue</h2><span id="progress">0 of 4 boarded</span></div><div id="queue" class="queue" aria-label="Passengers in boarding order"></div>
+<div class="models"><article class="model"><div class="model-heading"><div><p class="eyebrow">MODEL 01</p><h2>One shared capacity</h2></div><span class="model-icon">▰</span></div><p class="description">All overhead space becomes one big container.</p><div class="storage-label"><span>SHARED STORAGE</span><span>12 UNITS TOTAL</span></div><div id="shared-storage" class="storage shared"></div><div class="stats"><div><strong id="shared-left">12</strong><span>units remaining</span></div><div><strong id="shared-checked">0</strong><span>bags gate-checked</span></div></div><div id="shared-gate" class="gate"></div></article>
+<article class="model"><div class="model-heading"><div><p class="eyebrow">MODEL 02</p><h2>Three separate bins</h2></div><span class="model-icon">▥</span></div><p class="description">Each bag must fit entirely inside a single bin.</p><div class="storage-label"><span>BIN A</span><span>BIN B</span><span>BIN C</span></div><div id="separate-storage" class="separate"></div><div class="stats"><div><strong id="separate-left">12</strong><span>units remaining</span></div><div><strong id="separate-checked">0</strong><span>bags gate-checked</span></div></div><div id="separate-gate" class="gate"></div></article></div>
+<div class="insight" aria-live="polite"><span class="insight-icon">↳</span><div><strong id="insight-title">Meet the next passenger.</strong><p id="insight-text">Board one passenger at a time and watch both models respond to the same bag.</p></div></div>
+</section>
+<section class="notes"><article><p class="eyebrow">01 / THE OBSERVATION</p><h3>A familiar boarding moment.</h3><p>Overhead bins sometimes fill before everyone boards. Some passengers have to gate-check their carry-ons, which can mean waiting to collect them after landing.</p></article><article><p class="eyebrow">02 / WHAT WE SIMPLIFIED</p><h3>Rules, not aircraft measurements.</h3><p>We assume three 4-unit bins, one 1–3-unit bag per passenger, and a fixed boarding order. Bags cannot rotate or be rearranged. The separate-bin model uses the first bin with enough space.</p></article><article><p class="eyebrow">03 / WHAT THIS LEAVES OUT</p><h3>A model has its limits.</h3><p>Real bags have three-dimensional shapes. This experiment leaves out seat locations, under-seat storage, staff decisions, and collection times. It explains a possibility, not what caused a particular flight’s problem.</p></article></section>
+<details><summary>Look under the hood <span>Beginner-friendly JavaScript</span></summary><p>Both models process exactly the same queue. Only the rule for finding space changes.</p><pre><code>// Shared model: is there enough space in total?
+if (bagSize &lt;= sharedSpace) {
+  sharedSpace -= bagSize;
+} else {
+  // Gate-check the bag.
+}
+
+// Separate model: find the first bin that can fit the bag.
+const bin = bins.findIndex(space =&gt; space &gt;= bagSize);
+if (bin !== -1) {
+  bins[bin] -= bagSize;
+} else {
+  // Gate-check the bag, even if small gaps remain.
+}</code></pre></details>
+<footer><span>cabin. / A computational thinking experiment</span><span>Illustrative units · Not an airline prediction</span></footer>
+</main><script src="app.js"></script></body></html>
